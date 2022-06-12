@@ -140,7 +140,11 @@ func (h *SPAHandler) serveStaticAsset(w http.ResponseWriter, r *http.Request) bo
 	// fs.StatFS and works around this situation. Thus, we can rely on fs.Stat
 	// to give us stat information, if the file exists, whatever measures that
 	// takes.
-	info, err := fs.Stat(h.fs, r.URL.Path[1:]) // ...fs.FS uses unrooted paths.
+	path := r.URL.Path[1:] // ...fs.FS uses unrooted paths.
+	if path == "" {
+		return false // hitting root is always a case for index.html
+	}
+	info, err := fs.Stat(h.fs, r.URL.Path[1:])
 	// If we have a "regular" file then serve it using a regular
 	// http.FileServer. Fun fact: http.FileServer also sanitizes our already
 	// sanitized path.

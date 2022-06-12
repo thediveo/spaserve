@@ -176,6 +176,7 @@ var _ = Describe("", func() {
 			Expect(href).To(Equal(expected))
 		},
 		Entry("prefix /foo", "/bar/baz", "/foo", "/foo/"),
+		Entry("/", "/", "/", "/"),
 	)
 
 	It("returns a 500 when the index is missing", func() {
