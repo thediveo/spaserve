@@ -179,6 +179,23 @@ var _ = Describe("", func() {
 		Entry("/", "/", "/", "/"),
 	)
 
+	It("supports application-specific rewriting/post-processing", func() {
+		url, err := url.Parse("http://foo.bar:12345")
+		Expect(err).NotTo(HaveOccurred())
+		r := &http.Request{
+			URL: url,
+		}
+		const canary = "<!-- SOMETHING DIFFERENT -->"
+		h := NewSPAHandler(embStaticFs, "index.html",
+			WithIndexRewriter(func(r *http.Request, index string) string {
+				return index + canary
+			}))
+		w := httptest.NewRecorder()
+		h.ServeHTTP(w, r)
+		Expect(w.Result().StatusCode).To(Equal(http.StatusOK))
+		Expect(w.Body).To(HaveSuffix(canary))
+	})
+
 	It("returns a 500 when the index is missing", func() {
 		url, err := url.Parse("http://foo.bar:12345")
 		Expect(err).NotTo(HaveOccurred())

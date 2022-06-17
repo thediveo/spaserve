@@ -52,9 +52,10 @@ var baseRe = regexp.MustCompile(`(<base href=").*?("\s*/>)`)
 // are automatically adjusted to the correct request base path, based on
 // forwarding proxy headers.
 type SPAHandler struct {
-	fs                fs.FS        // the FS to serve static resources from.
-	index             string       // (unrooted) path and name of the index/SPA file inside fs.
-	staticfileHandler http.Handler // FS adapted to http's file serving handler needs.
+	fs                fs.FS         // the FS to serve static resources from.
+	index             string        // (unrooted) path and name of the index/SPA file inside fs.
+	staticfileHandler http.Handler  // FS adapted to http's file serving handler needs.
+	indexRewriter     IndexRewriter // optional user function to rewrite the index/SPA file as necessary.
 }
 
 // NewSPAHandler returns a new HTTP handler serving static resources from the
@@ -70,11 +71,34 @@ type SPAHandler struct {
 // system, use os.DirFS:
 //
 //     h := NewSPAHandler(os.DirFS("/opt/data/myspa"), "index.html")
-func NewSPAHandler(fs fs.FS, index string) *SPAHandler {
-	return &SPAHandler{
+func NewSPAHandler(fs fs.FS, index string, opts ...SPAHandlerOption) *SPAHandler {
+	h := &SPAHandler{
 		fs:                fs,
 		staticfileHandler: http.FileServer(http.FS(fs)),
 		index:             path.Clean("/" + index)[1:],
+	}
+	for _, opt := range opts {
+		opt(h)
+	}
+	return h
+}
+
+// SPAHandlerOption sets optional properties at the time of creating an
+// SPAHandler.
+type SPAHandlerOption func(*SPAHandler)
+
+// IndexRewriter rewrites (parts) of an index/SPA file contents to be delivered
+// to a requesting client, after the base element has been updated. It can be
+// optionally activated using the WithIndexRewriter option when creating a new
+// SPAHandler.
+type IndexRewriter func(r *http.Request, index string) string
+
+// WithIndexRewriter sets the specified IndexRewriter that gets called before
+// delivering the index/SPA file contents to requesting clients, allowing for
+// application-specific changes.
+func WithIndexRewriter(rewriter IndexRewriter) SPAHandlerOption {
+	return func(h *SPAHandler) {
+		h.indexRewriter = rewriter
 	}
 }
 
@@ -126,6 +150,9 @@ func (h *SPAHandler) serveRewrittenIndex(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	finalIndexhtml := baseRe.ReplaceAllString(string(indexhtmlcontents), "${1}"+base+"${2}")
+	if h.indexRewriter != nil {
+		finalIndexhtml = h.indexRewriter(r, finalIndexhtml)
+	}
 	http.ServeContent(w, r, "index.html", fileInfo.ModTime(), strings.NewReader(finalIndexhtml))
 }
 
