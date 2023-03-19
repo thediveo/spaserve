@@ -13,8 +13,8 @@
 // limitations under the License.
 
 /*
-Package httptest wraps the standard library's httptest.ResponseRecorder and
-fails any test attempting to do superfluous response.WriteHeader calls.
+Package httptest wraps the standard library's httptest.ResponseRecorder in order
+to fail any test doing superfluous response.WriteHeader calls.
 */
 package httptest
 
@@ -26,13 +26,13 @@ import (
 )
 
 // WrappedResponseRecorder wraps httptest.ResponseRecorder in order to fail
-// tests attempting to call WriteHeader multiple times.
+// tests doing superfluous WriteHeader calls.
 type WrappedResponseRecorder struct {
 	*stdhttptest.ResponseRecorder
 	wroteHeader bool
 }
 
-// NewRecorder returns a new test response recorder detecting multiple
+// NewRecorder returns a new test response recorder detecting superfluous
 // WriteHeader calls.
 func NewRecorder() *WrappedResponseRecorder {
 	return &WrappedResponseRecorder{
@@ -40,7 +40,8 @@ func NewRecorder() *WrappedResponseRecorder {
 	}
 }
 
-// WriteHeader implements http.ResponseWriter.
+// WriteHeader implements http.ResponseWriter, failing tests that do superfluous
+// WriteHeader calls.
 func (w *WrappedResponseRecorder) WriteHeader(code int) {
 	GinkgoHelper()
 	Expect(w.wroteHeader).To(BeFalse(), "superfluous response.WriteHeader call")

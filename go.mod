@@ -23,5 +23,6 @@ require (
 
 require (
 	github.com/onsi/gomega v1.27.4
+	github.com/thediveo/success v1.0.1
 	golang.org/x/sys v0.6.0 // indirect
 )

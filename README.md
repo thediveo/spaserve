@@ -1,10 +1,16 @@
 # SPA Serve
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/thediveo/spaserve.svg)](https://pkg.go.dev/github.com/thediveo/spaserve)
+![GitHub](https://img.shields.io/github/license/thediveo/spaserve)
+![build and test](https://github.com/TheDiveO/spaserve/workflows/build%20and%20test/badge.svg?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/thediveo/spaserve)](https://goreportcard.com/report/github.com/thediveo/spaserve)
+![Coverage](https://img.shields.io/badge/Coverage-95.5%25-brightgreen)
+
 `spaserve` serves "Single Page Applications" (SPAs) from Go that are using...
 
-- client-side DOM routing,
-- varying base paths in different deployments or even within the same deployment
-  because of multiple access paths.
+- ...client-side DOM routing,
+- ...varying base paths in different deployments or even within the same
+  deployment because of multiple access paths.
 
 And all this **without the need to rebuild your SPA production code** just
 because the (HTML) "[base
@@ -30,7 +36,7 @@ URL](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base)" changes.
    ```
 
 2. In case of CRA (Create React App), set the `homepage` field in `package.json`
-   to `"."` (**not** `"/"`):
+   to `"."` (**not** the root slash ~~`"/"`~~):
 
    ```json
    {
@@ -38,7 +44,8 @@ URL](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base)" changes.
    }
    ```
 
-3. add a basename helper to your SPA sources, such as `src/util/basename.ts`:
+3. add a basename helper to your SPA sources, such as a new file
+   `src/util/basename.ts`:
 
    ```ts
    export const basename = new URL(
@@ -93,3 +100,14 @@ base(names), et cetera...
   http.FileServer(..)?_"](https://stackoverflow.com/a/28798174/6632214)
   (stackoverflow) – and yes, `spaserve` uses `http.FileServer` which supports
   `fs.FS` via an `http.FS` adaptor.
+
+## Go Version Support
+
+`spaserve` supports versions of Go that are noted by the [Go release
+policy](https://golang.org/doc/devel/release.html#policy), that is, major
+versions _N_ and _N_-1 (where _N_ is the current major version).
+
+## Copyright and License
+
+`spaserve` is Copyright 2022-23 Harald Albrecht, and licensed under the Apache
+License, Version 2.0.

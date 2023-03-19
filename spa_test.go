@@ -23,8 +23,10 @@ import (
 	"os"
 
 	"github.com/PuerkitoBio/goquery"
+
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	. "github.com/thediveo/success"
 )
 
 //go:embed test/*
@@ -35,8 +37,7 @@ var _ = Describe("", func() {
 
 	DescribeTable("test has embedded files correctly set up",
 		func(name string) {
-			f, err := embStaticFs.Open(name)
-			Expect(err).NotTo(HaveOccurred())
+			f := Successful(embStaticFs.Open(name))
 			f.Close()
 		},
 		Entry("index.html", "index.html"),
@@ -45,9 +46,9 @@ var _ = Describe("", func() {
 
 	DescribeTable("determines original request path",
 		func(path string, header http.Header, expected string) {
-			url, err := url.Parse("http://foo.bar:12345" + path)
-			Expect(err).NotTo(HaveOccurred())
+			url := Successful(url.Parse("http://foo.bar:12345" + path))
 			r := &http.Request{
+				Method: "GET",
 				URL:    url,
 				Header: header,
 			}
@@ -86,9 +87,9 @@ var _ = Describe("", func() {
 
 	DescribeTable("determines basename path",
 		func(path string, header http.Header, expected string) {
-			url, err := url.Parse("http://foo.bar:12345" + path)
-			Expect(err).NotTo(HaveOccurred())
+			url := Successful(url.Parse("http://foo.bar:12345" + path))
 			r := &http.Request{
+				Method: "GET",
 				URL:    url,
 				Header: header,
 			}
@@ -123,10 +124,10 @@ var _ = Describe("", func() {
 
 	DescribeTable("serves static content with correct status code",
 		func(path, prefix string, expectedServed bool, expectedCanary string, expectedStatus int) {
-			url, err := url.Parse("http://foo.bar:12345" + path)
-			Expect(err).NotTo(HaveOccurred())
+			url := Successful(url.Parse("http://foo.bar:12345" + path))
 			r := &http.Request{
-				URL: url,
+				Method: "GET",
+				URL:    url,
 				Header: http.Header{
 					ForwardedPrefixHeader: []string{prefix},
 				},
@@ -137,7 +138,8 @@ var _ = Describe("", func() {
 			switch expectedStatus {
 			case 0:
 			case http.StatusOK:
-				Expect(w.Body.ReadBytes('\n')).To(ContainSubstring(expectedCanary))
+				contents := Successful(w.Body.ReadBytes('\n'))
+				Expect(string(contents)).To(ContainSubstring(expectedCanary))
 			default:
 				Expect(w.Result().StatusCode).To(Equal(expectedStatus))
 			}
@@ -156,10 +158,10 @@ var _ = Describe("", func() {
 
 	DescribeTable("rewrites the index file",
 		func(path, prefix string, expected string) {
-			url, err := url.Parse("http://foo.bar:12345" + path)
-			Expect(err).NotTo(HaveOccurred())
+			url := Successful(url.Parse("http://foo.bar:12345" + path))
 			r := &http.Request{
-				URL: url,
+				Method: "GET",
+				URL:    url,
 				Header: http.Header{
 					ForwardedPrefixHeader: []string{prefix},
 				},
@@ -180,10 +182,10 @@ var _ = Describe("", func() {
 	)
 
 	It("supports application-specific rewriting/post-processing", func() {
-		url, err := url.Parse("http://foo.bar:12345")
-		Expect(err).NotTo(HaveOccurred())
+		url := Successful(url.Parse("http://foo.bar:12345"))
 		r := &http.Request{
-			URL: url,
+			Method: "GET",
+			URL:    url,
 		}
 		const canary = "<!-- SOMETHING DIFFERENT -->"
 		h := NewSPAHandler(embStaticFs, "index.html",
@@ -197,9 +199,11 @@ var _ = Describe("", func() {
 	})
 
 	It("returns a 500 when the index is missing", func() {
-		url, err := url.Parse("http://foo.bar:12345")
-		Expect(err).NotTo(HaveOccurred())
-		r := &http.Request{URL: url}
+		url := Successful(url.Parse("http://foo.bar:12345"))
+		r := &http.Request{
+			Method: "GET",
+			URL:    url,
+		}
 		h := NewSPAHandler(embStaticFs, "bonkers.html")
 		w := httptest.NewRecorder()
 		h.serveRewrittenIndex(w, r)
@@ -208,9 +212,11 @@ var _ = Describe("", func() {
 
 	DescribeTable("serves a static asset using varying fs.FS implementations",
 		func(fs fs.FS) {
-			url, err := url.Parse("http://foo.bar:12345/icon.png")
-			Expect(err).NotTo(HaveOccurred())
-			r := &http.Request{URL: url}
+			url := Successful(url.Parse("http://foo.bar:12345/icon.png"))
+			r := &http.Request{
+				Method: "GET",
+				URL:    url,
+			}
 			h := NewSPAHandler(fs, "index.html")
 			w := httptest.NewRecorder()
 			h.ServeHTTP(w, r)

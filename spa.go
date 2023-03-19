@@ -70,7 +70,7 @@ type SPAHandler struct {
 // In order to serve the static resources from a directory on the OS file
 // system, use os.DirFS:
 //
-//     h := NewSPAHandler(os.DirFS("/opt/data/myspa"), "index.html")
+//	h := NewSPAHandler(os.DirFS("/opt/data/myspa"), "index.html")
 func NewSPAHandler(fs fs.FS, index string, opts ...SPAHandlerOption) *SPAHandler {
 	h := &SPAHandler{
 		fs:                fs,
@@ -104,7 +104,7 @@ func WithIndexRewriter(rewriter IndexRewriter) SPAHandlerOption {
 
 // ServeHTTP either serves a static resource when available inside
 // SPAHandler.StaticAssetsPath or otherwise the specified Index asset inside the
-// static assets everwhere else. This behavior is required for SPAs with
+// static assets everywhere else. This behavior is required for SPAs with
 // client-side DOM routers, as otherwise bookmarking (router) links or reloading
 // an SPA with the current route other than "/" would fail.
 func (h *SPAHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
