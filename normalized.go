@@ -26,9 +26,11 @@ import (
 func NormalizedHttpError(w http.ResponseWriter, err error) {
 	if errors.Is(err, fs.ErrNotExist) {
 		http.Error(w, "404 page not found", http.StatusNotFound)
+		return
 	}
 	if errors.Is(err, fs.ErrPermission) {
 		http.Error(w, "403 Forbidden", http.StatusForbidden)
+		return
 	}
 	http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
 }

@@ -19,7 +19,8 @@ import (
 	"fmt"
 	"io/fs"
 	"net/http"
-	"net/http/httptest"
+
+	"github.com/thediveo/spaserve/test/httptest"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
