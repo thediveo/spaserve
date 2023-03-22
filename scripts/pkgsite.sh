@@ -1,10 +1,10 @@
 #!/bin/bash
-#set -e
+set -e
 
 if ! command -v pkgsite &>/dev/null; then
     export PATH="$(go env GOPATH)/bin:$PATH"
     if ! command -v pkgsite &>/dev/null; then
-        go install golang.org/x/pkgsite/cmd/pkgsite@master
+        go install golang.org/x/pkgsite/cmd/pkgsite@latest
     fi
 fi
 

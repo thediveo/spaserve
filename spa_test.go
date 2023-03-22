@@ -29,9 +29,9 @@ import (
 	. "github.com/thediveo/success"
 )
 
-//go:embed test/*
+//go:embed testdata/*
 var embeddedFiles embed.FS
-var embStaticFs, _ = fs.Sub(embeddedFiles, "test")
+var embStaticFs, _ = fs.Sub(embeddedFiles, "testdata")
 
 var _ = Describe("", func() {
 
@@ -223,7 +223,7 @@ var _ = Describe("", func() {
 			Expect(w.Result().StatusCode).To(Equal(http.StatusOK))
 		},
 		Entry("from embedded fs", embStaticFs),
-		Entry("from test dir fs", os.DirFS("./test")),
+		Entry("from test dir fs", os.DirFS("./testdata")),
 	)
 
 })
