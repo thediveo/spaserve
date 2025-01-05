@@ -2,7 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/thediveo/spaserve.svg)](https://pkg.go.dev/github.com/thediveo/spaserve)
 ![GitHub](https://img.shields.io/github/license/thediveo/spaserve)
-![build and test](https://github.com/TheDiveO/spaserve/workflows/build%20and%20test/badge.svg?branch=master)
+![build and test](https://github.com/TheDiveO/spaserve/actions/workflows/buildandtest.yaml/badge.svg?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/thediveo/spaserve)](https://goreportcard.com/report/github.com/thediveo/spaserve)
 ![Coverage](https://img.shields.io/badge/Coverage-95.8%25-brightgreen)
 
@@ -15,6 +15,9 @@
 And all this **without the need to rebuild your SPA production code** just
 because the (HTML) "[base
 URL](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base)" changes.
+
+For devcontainer instructions, please see the [section "DevContainer"
+below](#devcontainer).
 
 ## Usage
 
@@ -101,6 +104,18 @@ base(names), et cetera...
   (stackoverflow) – and yes, `spaserve` uses `http.FileServer` which supports
   `fs.FS` via an `http.FS` adaptor.
 
+## DevContainer
+
+> [!CAUTION]
+>
+> Do **not** use VSCode's "~~Dev Containers: Clone Repository in Container
+> Volume~~" command, as it is utterly broken by design, ignoring
+> `.devcontainer/devcontainer.json`.
+
+1. `git clone https://github.com/thediveo/enumflag`
+2. in VSCode: Ctrl+Shift+P, "Dev Containers: Open Workspace in Container..."
+3. select `enumflag.code-workspace` and off you go...
+
 ## Go Version Support
 
 `spaserve` supports versions of Go that are noted by the [Go release
@@ -109,5 +124,5 @@ versions _N_ and _N_-1 (where _N_ is the current major version).
 
 ## Copyright and License
 
-`spaserve` is Copyright 2022-23 Harald Albrecht, and licensed under the Apache
-License, Version 2.0.
+`spaserve` is Copyright 2022, 2025 Harald Albrecht, and licensed under the
+Apache License, Version 2.0.
