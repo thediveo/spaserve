@@ -35,7 +35,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
-          - name: Autobuild
+      - name: Autobuild
         uses: github/codeql-action/autobuild@49abf0ba24d0b7953cb586944e918a0b92074c80 # pin@v2
 
       - name: Perform CodeQL Analysis
