@@ -21,8 +21,8 @@ package httptest
 import (
 	stdhttptest "net/http/httptest"
 
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
+	. "github.com/onsi/ginkgo/v2" //nolint:staticcheck // testing support
+	. "github.com/onsi/gomega"    //nolint:staticcheck // testing support
 )
 
 // WrappedResponseRecorder wraps httptest.ResponseRecorder in order to fail

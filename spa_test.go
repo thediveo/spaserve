@@ -38,7 +38,7 @@ var _ = Describe("", func() {
 	DescribeTable("test has embedded files correctly set up",
 		func(name string) {
 			f := Successful(embStaticFs.Open(name))
-			f.Close()
+			Expect(f.Close()).To(Succeed())
 		},
 		Entry("index.html", "index.html"),
 		Entry("static/js/some.js", "static/js/some.js"),
