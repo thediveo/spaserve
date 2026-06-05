@@ -112,9 +112,9 @@ base(names), et cetera...
 > Volume~~" command, as it is utterly broken by design, ignoring
 > `.devcontainer/devcontainer.json`.
 
-1. `git clone https://github.com/thediveo/enumflag`
+1. `git clone https://github.com/thediveo/spaserve`
 2. in VSCode: Ctrl+Shift+P, "Dev Containers: Open Workspace in Container..."
-3. select `enumflag.code-workspace` and off you go...
+3. select `spaserve.code-workspace` and off you go...
 
 ## Go Version Support
 
@@ -124,5 +124,5 @@ versions _N_ and _N_-1 (where _N_ is the current major version).
 
 ## Copyright and License
 
-`spaserve` is Copyright 2022, 2025 Harald Albrecht, and licensed under the
+`spaserve` is Copyright 2022, 2026 Harald Albrecht, and licensed under the
 Apache License, Version 2.0.
