@@ -3,7 +3,6 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/thediveo/spaserve.svg)](https://pkg.go.dev/github.com/thediveo/spaserve)
 ![GitHub](https://img.shields.io/github/license/thediveo/spaserve)
 ![build and test](https://github.com/TheDiveO/spaserve/actions/workflows/buildandtest.yaml/badge.svg?branch=master)
-[![Go Report Card](https://goreportcard.com/badge/github.com/thediveo/spaserve)](https://goreportcard.com/report/github.com/thediveo/spaserve)
 ![Coverage](https://img.shields.io/badge/Coverage-95.8%25-brightgreen)
 
 `spaserve` serves "Single Page Applications" (SPAs) from Go that are using...
